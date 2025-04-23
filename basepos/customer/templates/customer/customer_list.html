@@ -12,7 +12,7 @@
         }
 
         .container {
-            max-width: 900px;
+            max-width: 1000px;
             margin: auto;
             background: white;
             padding: 30px;
@@ -25,15 +25,6 @@
             margin-top: 0;
         }
 
-        a {
-            text-decoration: none;
-            color: #2c3e50;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
         .btn {
             display: inline-block;
             padding: 10px 15px;
@@ -41,10 +32,23 @@
             background-color: #27ae60;
             color: white;
             border-radius: 6px;
+            text-decoration: none;
         }
 
         .btn:hover {
             background-color: #219150;
+        }
+
+        form {
+            margin-bottom: 20px;
+        }
+
+        input[type="text"] {
+            width: 300px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            margin-right: 10px;
         }
 
         ul {
@@ -61,28 +65,75 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .info {
+            flex-grow: 1;
+        }
+
+        .info p {
+            margin: 2px 0;
+            font-size: 14px;
         }
 
         .actions a {
             margin-left: 10px;
             font-size: 14px;
             color: #2980b9;
+            text-decoration: none;
         }
 
         .actions a:hover {
             color: #1c5980;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination span, .pagination a {
+            display: inline-block;
+            margin: 0 5px;
+            padding: 6px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        .pagination .current {
+            background-color: #2c3e50;
+            color: white;
+            border-color: #2c3e50;
+        }
+
+        .pagination a:hover {
+            background-color: #ecf0f1;
         }
     </style>
 </head>
 <body>
 <div class="container">
     <h2>Customer List</h2>
+
     <a href="{% url 'customer-add' %}" class="btn">+ Add Customer</a>
+
+    <!-- Search Form -->
+    <form method="get">
+        <input type="text" name="q" value="{{ request.GET.q }}" placeholder="Search by name or phone">
+        <button type="submit">Search</button>
+    </form>
+
     <ul>
-        {% for customer in object_list %}
+        {% for customer in customers %}
         <li>
-            <div>
-                <strong>{{ customer.name }}</strong> — {{ customer.phone }}
+            <div class="info">
+                <strong>{{ customer.name }}</strong>
+                <p>📞 {{ customer.phone }} | 📧 {{ customer.email }}</p>
+                <p>🏠 {{ customer.address }} | 🎂 {{ customer.date_of_birth }}</p>
+                <p>⭐ Points: {{ customer.point }}</p>
             </div>
             <div class="actions">
                 <a href="{% url 'customer-detail' customer.pk %}">View</a>
@@ -94,6 +145,19 @@
         <li>No customers found.</li>
         {% endfor %}
     </ul>
+
+    <!-- Pagination -->
+    <div class="pagination">
+        {% if customers.has_previous %}
+            <a href="?q={{ request.GET.q }}&page={{ customers.previous_page_number }}">« Prev</a>
+        {% endif %}
+
+        <span class="current">Page {{ customers.number }} of {{ customers.paginator.num_pages }}</span>
+
+        {% if customers.has_next %}
+            <a href="?q={{ request.GET.q }}&page={{ customers.next_page_number }}">Next »</a>
+        {% endif %}
+    </div>
 </div>
 </body>
 </html>

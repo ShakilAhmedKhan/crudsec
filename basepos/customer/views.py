@@ -7,11 +7,31 @@ from django.views.generic import ListView, CreateView, UpdateView, DetailView, D
 from django.urls import reverse_lazy
 from .models import Customer, Medicine
 from .forms import CustomerForm, MedicineForm
-
+from django.db.models import Q
+from django.core.paginator import Paginator
 
 class CustomerListView(ListView):
     model = Customer
     template_name = 'customer/customer_list.html'
+    context_object_name = 'customers'
+    paginate_by = 10 # Shows 10 per page
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        qs = super().get_queryset()
+        if query:
+            qs = qs.filter(
+                Q(name__icontains=query) |
+                Q(phone__icontains=query) |
+                Q(email__icontains=query)
+            )
+
+        return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["query"] = self.request.GET.get("q", "")
+        return context
 
 class CustomerCreateView(CreateView):
     model = Customer
