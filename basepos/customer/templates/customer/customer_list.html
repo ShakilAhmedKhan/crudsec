@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Customer List</title>
+</head>
+<body>
+
+
+<h2>Customer List</h2>
+<a href="{% url 'customer-add' %}">Add Customer</a>
+<ul>
+    {% for customer in object_list %}
+    <li>
+        <a href="{% url 'customer-detail' customer.pk %}">{{ customer.name }}</a>
+        | <a href="{% url 'customer-edit' customer.pk %}">Edit</a>
+        | <a href="{% url 'customer-delete' customer.pk %}">Delete</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
+</body>
+</html>

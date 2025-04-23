@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MedicineList</title>
+</head>
+<body>
+
+
+<h2>Medicine List</h2>
+<a href="{% url 'medicine-add' %}">Add Medicine</a>
+<ul>
+    {% for medicine in object_list %}
+    <li>
+        <a href="{% url 'medicine-detail' medicine.pk %}">{{ medicine.name }}</a>
+        | <a href="{% url 'medicine-edit' medicine.pk %}">Edit</a>
+        | <a href="{% url 'medicine-delete' medicine.pk %}">Delete</a>
+    </li>
+    {% endfor %}
+</ul>
+
+
+</body>
+</html>

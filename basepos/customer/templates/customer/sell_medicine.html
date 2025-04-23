@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Point of Sale - Sell Items</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+        }
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        label {
+            display: block;
+            margin: 10px 0 5px;
+            font-weight: 600;
+        }
+        select, input[type="number"], input[type="text"], button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+        button {
+            background: #2c3e50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background: #34495e;
+        }
+        .btn-inline {
+            display: inline-block;
+            width: auto;
+            padding: 10px 15px;
+            margin-left: 10px;
+            text-decoration: none;
+            background: #27ae60;
+            color: white;
+            border-radius: 6px;
+        }
+        .btn-inline:hover {
+            background: #219150;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #ecf0f1;
+        }
+        .total {
+            font-size: 18px;
+            text-align: right;
+            margin-top: 20px;
+            font-weight: bold;
+        }
+        .remove-btn {
+            color: red;
+            cursor: pointer;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h2>Sell Items</h2>
+    <form method="post" onsubmit="return validateCustomer()">
+        {% csrf_token %}
+        {{ sale_form.as_p }}
+        {{ formset.management_form }}
+
+        <!-- Customer Selection -->
+        <label for="customer">Select Customer</label>
+        <select name="customer" id="customer" required>
+            <option value="">-- Choose Customer --</option>
+            {% for cust in customers %}
+                <option value="{{ cust.id }}">{{ cust.name }} ({{ cust.phone }})</option>
+            {% endfor %}
+        </select>
+        <a href="{% url 'customer-add' %}" class="btn-inline">+ New Customer</a>
+
+        <!-- Medicine Selection -->
+        <label for="medicine">Medicine</label>
+        <select name="medicine" id="medicine" required>
+            <option value="">-- Select Medicine--</option>
+            {% for med in medicines %}
+                <option value="{{ med.id }}" data-name="{{ med.name }}" data-stock="{{ med.stock }}" data-price="{{ med.price }}">
+                    {{ med.name }} (Stock: {{ med.stock }}, Price: ৳{{ med.price }})
+                </option>
+            {% endfor %}
+        </select>
+
+        <label for="quantity">Quantity</label>
+        <input type="number" id="quantity" min="1" placeholder="Enter quantity">
+
+        <button type="button" onclick="addToCart()">Add to Cart</button>
+
+        <!-- Items Table -->
+        <table>
+            <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Unit Price (৳)</th>
+                <th>Subtotal (৳)</th>
+                <th>Remove</th>
+            </tr>
+            </thead>
+            <tbody id="cart-body"></tbody>
+        </table>
+
+        <div class="total">Total: <span id="total">0.00</span> ৳</div>
+
+        <input type="submit" value="Confirm Sale" style="margin-top: 20px;">
+    </form>
+</div>
+
+<script>
+    let total = 0.0;
+    let index = 0;
+
+    function validateCustomer() {
+        const customer = document.getElementById('customer').value;
+        if (!customer) {
+            alert("Please select a customer before proceeding.");
+            return false;
+        }
+        return true;
+    }
+
+    function addToCart() {
+        const medSelect = document.getElementById("medicine");
+        const quantityInput = document.getElementById("quantity");
+        const cartBody = document.getElementById("cart-body");
+
+        const medId = medSelect.value;
+        const medName = medSelect.options[medSelect.selectedIndex].dataset.name;
+        const stock = parseInt(medSelect.options[medSelect.selectedIndex].dataset.stock);
+        const price = parseFloat(medSelect.options[medSelect.selectedIndex].dataset.price);
+        const quantity = parseInt(quantityInput.value);
+
+        if (!medId || !quantity || quantity < 1) {
+            alert("Please select a medicine and enter a valid quantity.");
+            return;
+        }
+
+        if (quantity > stock) {
+            alert("Insufficient stock.");
+            return;
+        }
+
+        const subtotal = (quantity * price).toFixed(2);
+        total += parseFloat(subtotal);
+
+        const row = document.createElement("tr");
+        row.innerHTML = `
+            <td>
+                <input type="hidden" name="form-${index}-medicine" value="${medId}">${medName}
+            </td>
+            <td>
+                <input type="hidden" name="form-${index}-quantity" value="${quantity}">${quantity}
+            </td>
+            <td>${price.toFixed(2)}</td>
+            <td>${subtotal}</td>
+            <td><span class="
