@@ -3,22 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <title>Customer List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 8px;
+        }
+
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+
+        a {
+            text-decoration: none;
+            color: #2c3e50;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 10px 15px;
+            margin-bottom: 20px;
+            background-color: #27ae60;
+            color: white;
+            border-radius: 6px;
+        }
+
+        .btn:hover {
+            background-color: #219150;
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        li {
+            background-color: #f9f9f9;
+            margin-bottom: 10px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .actions a {
+            margin-left: 10px;
+            font-size: 14px;
+            color: #2980b9;
+        }
+
+        .actions a:hover {
+            color: #1c5980;
+        }
+    </style>
 </head>
 <body>
-
-
-<h2>Customer List</h2>
-<a href="{% url 'customer-add' %}">Add Customer</a>
-<ul>
-    {% for customer in object_list %}
-    <li>
-        <a href="{% url 'customer-detail' customer.pk %}">{{ customer.name }}</a>
-        | <a href="{% url 'customer-edit' customer.pk %}">Edit</a>
-        | <a href="{% url 'customer-delete' customer.pk %}">Delete</a>
-    </li>
-    {% endfor %}
-</ul>
-
-
+<div class="container">
+    <h2>Customer List</h2>
+    <a href="{% url 'customer-add' %}" class="btn">+ Add Customer</a>
+    <ul>
+        {% for customer in object_list %}
+        <li>
+            <div>
+                <strong>{{ customer.name }}</strong> — {{ customer.phone }}
+            </div>
+            <div class="actions">
+                <a href="{% url 'customer-detail' customer.pk %}">View</a>
+                <a href="{% url 'customer-edit' customer.pk %}">Edit</a>
+                <a href="{% url 'customer-delete' customer.pk %}">Delete</a>
+            </div>
+        </li>
+        {% empty %}
+        <li>No customers found.</li>
+        {% endfor %}
+    </ul>
+</div>
 </body>
 </html>
