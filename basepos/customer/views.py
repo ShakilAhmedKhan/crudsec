@@ -40,14 +40,14 @@ class SellMedicineView(View):
     #model = Customer
     template_name = 'customer/sell_medicine.html'
     def get(self, request, *args, **kwargs):
-        sale_form = SaleForm()
-        formset = SaleItemFormSet()
+        #sale_form = SaleForm()
+        #formset = SaleItemFormSet()
         customers = Customer.objects.all()
         medicines = Medicine.objects.all()
 
         return render(request, self.template_name, {
-            'sale_form': sale_form,
-            'formset': formset,
+          #  'sale_form': sale_form,
+           # 'formset': formset,
             'customers': customers,
             'medicines': medicines,
         })
