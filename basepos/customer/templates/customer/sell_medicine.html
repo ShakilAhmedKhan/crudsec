@@ -125,6 +125,11 @@
                 <th>Unit Price (৳)</th>
                 <th>Subtotal (৳)</th>
                 <th>Remove</th>
+
+                <!-- inside the <td> for Remove column     <td><span class="remove-btn" onclick="removeRow(this, ${subtotal})">X</span></td>     -->
+
+
+
             </tr>
             </thead>
             <tbody id="cart-body"></tbody>
@@ -135,6 +140,7 @@
         <input type="submit" value="Confirm Sale" style="margin-top: 20px;">
     </form>
 </div>
+
 
 <script>
     let total = 0.0;
@@ -172,15 +178,46 @@
 
         const subtotal = (quantity * price).toFixed(2);
         total += parseFloat(subtotal);
+        document.getElementById("total").innerText = total.toFixed(2);
 
         const row = document.createElement("tr");
         row.innerHTML = `
             <td>
-                <input type="hidden" name="form-${index}-medicine" value="${medId}">${medName}
+                <input type="hidden" name="form-${index}-medicine" value="${medId}">
+                ${medName}
             </td>
             <td>
-                <input type="hidden" name="form-${index}-quantity" value="${quantity}">${quantity}
+                <input type="hidden" name="form-${index}-quantity" value="${quantity}">
+                ${quantity}
             </td>
-            <td>${price.toFixed(2)}</td>
+            <td>
+                <input type="hidden" name="form-${index}-price_at_sale" value="${price.toFixed(2)}">
+                ${price.toFixed(2)}
+            </td>
             <td>${subtotal}</td>
-            <td><span class="
+            <td><span class="remove-btn" onclick="removeRow(this, ${subtotal})">X</span></td>
+        `;
+
+        cartBody.appendChild(row);
+        index++;
+
+        // Update TOTAL FORMS input in management form
+        const totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
+        totalFormsInput.value = index;
+
+        // Clear medicine and quantity inputs
+        medSelect.selectedIndex = 0;
+        quantityInput.value = "";
+    }
+
+    function removeRow(button, amount) {
+        const row = button.closest("tr");
+        row.remove();
+        total -= parseFloat(amount);
+        document.getElementById("total").innerText = total.toFixed(2);
+        index--;
+        // update form count
+        const totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
+        totalFormsInput.value = index;
+    }
+</script>
