@@ -22,3 +22,13 @@ class Medicine(models.Model):
         return self.name
 
 
+class Sale(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    sale_date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Invoice #{self.id} - {self.customer.name}"
+
+
+
+
