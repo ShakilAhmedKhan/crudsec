@@ -116,9 +116,11 @@
 </head>
 <body>
 <div class="container">
+
+    <a href="{% url 'sell-medicine' %}" class="btn">Go to POS</a>
     <h2>Customer List</h2>
 
-    <a href="{% url 'customer-add' %}" class="btn">+ Add Customer</a>
+    <a href="{% url 'customer-add' %}" class="btn">New Customer</a>
 
     <!-- Search Form -->
     <form method="get">
