@@ -86,6 +86,7 @@
 <div class="container">
 
     <a href="{% url 'invoices-list' %}" class="btn-inline" style="background: #2980b9; margin-bottom: 20px;">📄 View Invoices</a>
+    <a href="{% url 'customer-add' %}" class="btn-inline">+ New Customer</a>
 
     <h2>Sell Items</h2>
     <form method="post" onsubmit="return validateCustomer()">
@@ -101,7 +102,7 @@
                 <option value="{{ cust.id }}">{{ cust.name }} ({{ cust.phone }})</option>
             {% endfor %}
         </select>
-        <a href="{% url 'customer-add' %}" class="btn-inline">+ New Customer</a>
+
 
         <!-- Medicine Selection -->
         <label for="medicine">Medicine</label>
