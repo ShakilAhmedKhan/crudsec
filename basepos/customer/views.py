@@ -56,21 +56,44 @@ class CustomerDeleteView(DeleteView):
 
 
 
+from django.views import View
+from django.shortcuts import render, redirect
+from .models import Customer, Medicine, Sale, SaleItem
+from django.views.decorators.csrf import csrf_exempt
+from django.utils.decorators import method_decorator
+
+@method_decorator(csrf_exempt, name='dispatch')
 class SellMedicineView(View):
-    #model = Customer
     template_name = 'customer/sell_medicine.html'
+
     def get(self, request, *args, **kwargs):
-        #sale_form = SaleForm()
-        #formset = SaleItemFormSet()
         customers = Customer.objects.all()
         medicines = Medicine.objects.all()
-
         return render(request, self.template_name, {
-          #  'sale_form': sale_form,
-           # 'formset': formset,
             'customers': customers,
             'medicines': medicines,
         })
+
+    def post(self, request, *args, **kwargs):
+        customer_id = request.POST.get("customer")
+        customer = Customer.objects.get(id=customer_id)
+
+        sale = Sale.objects.create(customer=customer)
+
+        total_forms = int(request.POST.get('form-TOTAL_FORMS', 0))
+        for i in range(total_forms):
+            medicine_id = request.POST.get(f'form-{i}-medicine')
+            quantity = int(request.POST.get(f'form-{i}-quantity'))
+            price = float(request.POST.get(f'form-{i}-price_at_sale'))
+
+            medicine = Medicine.objects.get(id=medicine_id)
+            SaleItem.objects.create(sale=sale, medicine=medicine, quantity=quantity, price_at_sale=price)
+
+            # Update medicine stock
+            medicine.stock -= quantity
+            medicine.save()
+
+        return redirect('invoices-list')  # Or wherever you want to redirect after sale
 
 
 #Medicine Views
