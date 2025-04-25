@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoices</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 30px;
+        }
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background: #ecf0f1;
+        }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background: #34495e;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="{% url 'sell-medicine' %}" class="back-button">← Back to POS</a>
+    <h2>Invoices List</h2>
+    <table>
+        <thead>
+        <tr>
+            <th>Invoice ID</th>
+            <th>Customer</th>
+            <th>Date</th>
+            <th>Total (৳)</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices %}
+        <tr>
+            <td>{{ invoice.id }}</td>
+            <td>{{ invoice.customer.name }} ({{ invoice.customer.phone }})</td>
+            <td>{{ invoice.sale_date|date:"Y-m-d H:i" }}</td>
+            <td>{{ invoice.total }}</td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="4" style="text-align:center;">No invoices found.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+</body>
+</html>
