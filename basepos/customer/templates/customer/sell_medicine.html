@@ -84,6 +84,9 @@
 </head>
 <body>
 <div class="container">
+
+    <a href="{% url 'invoices-list' %}" class="btn-inline" style="background: #2980b9; margin-bottom: 20px;">📄 View Invoices</a>
+
     <h2>Sell Items</h2>
     <form method="post" onsubmit="return validateCustomer()">
         {% csrf_token %}

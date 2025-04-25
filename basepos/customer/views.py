@@ -5,7 +5,7 @@ from django.shortcuts import render
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DetailView, DeleteView
 from django.urls import reverse_lazy
-from .models import Customer, Medicine
+from .models import Customer, Medicine, Sale
 from .forms import CustomerForm, MedicineForm
 from django.db.models import Q
 from django.core.paginator import Paginator
@@ -101,6 +101,13 @@ class MedicineDeleteView(DeleteView):
 
 
 
+#Sale/Invoice views
+
+class SaleListView(ListView):
+    model = Sale
+    template_name = 'sale/invoices_list.html'
+    context_object_name = 'invoices'
+    ordering = ['-sale_date']
 
 
 
