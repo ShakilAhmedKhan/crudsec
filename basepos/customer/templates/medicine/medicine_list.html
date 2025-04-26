@@ -62,13 +62,27 @@
         .medicine-actions a:hover {
             text-decoration: underline;
         }
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background: #34495e;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
     <h2>Medicine List</h2>
+
     <a href="{% url 'medicine-add' %}" class="add-button">Add Medicine</a>
+    <a href="{% url 'sell-medicine' %}" class="back-button">Go to POS</a>
     <ul class="medicine-list">
         {% for medicine in object_list %}
         <li>
