@@ -25,9 +25,11 @@ class Medicine(models.Model):
 class Sale(models.Model):
     customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
     sale_date = models.DateTimeField(auto_now_add=True)
+    total_amount = models.FloatField(default=0)
 
     def __str__(self):
         return f"Invoice #{self.id} - {self.customer.name}"
+
 
 class SaleItem(models.Model):
     sale = models.ForeignKey(Sale, on_delete=models.CASCADE, related_name='items')

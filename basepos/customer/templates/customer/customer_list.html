@@ -112,12 +112,42 @@
         .pagination a:hover {
             background-color: #ecf0f1;
         }
+
+        .btn-inline {
+            display: inline-block;
+            width: auto;
+            padding: 10px 15px;
+            margin-left: 10px;
+            text-decoration: none;
+            background: #27ae60;
+            color: white;
+            border-radius: 6px;
+        }
+        .btn-inline:hover {
+            background: #219150;
+        }
+
+        .back-button {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 15px;
+            background: #2c3e50;
+            color: white;
+            border-radius: 6px;
+            text-decoration: none;
+        }
+        .back-button:hover {
+            background: #34495e;
+        }
+
+
     </style>
 </head>
 <body>
 <div class="container">
 
-    <a href="{% url 'sell-medicine' %}" class="btn">Go to POS</a>
+    <a href="{% url 'sell-medicine' %}" class="back-button">Go to POS</a>
+    <a href="{% url 'invoices-list' %}" class="btn-inline" style="background: #2980b9; margin-bottom: 20px;">📄 View Invoices</a>
     <h2>Customer List</h2>
 
     <a href="{% url 'customer-add' %}" class="btn">New Customer</a>

@@ -78,22 +78,34 @@ class SellMedicineView(View):
         customer_id = request.POST.get("customer")
         customer = Customer.objects.get(id=customer_id)
 
-        sale = Sale.objects.create(customer=customer)
+        sale = Sale.objects.create(customer=customer, total_amount=0)  # Initially 0
+        print(f"New Sale Created: {sale.id}")
 
+        total = 0
         total_forms = int(request.POST.get('form-TOTAL_FORMS', 0))
+        print(f"Total forms: {total_forms}")
+
         for i in range(total_forms):
             medicine_id = request.POST.get(f'form-{i}-medicine')
             quantity = int(request.POST.get(f'form-{i}-quantity'))
             price = float(request.POST.get(f'form-{i}-price_at_sale'))
 
             medicine = Medicine.objects.get(id=medicine_id)
+            subtotal = quantity * price
+            total += subtotal
+            print(f"Medicine: {medicine.name}, Quantity: {quantity}, Price: {price}, Subtotal: {subtotal}")
+
             SaleItem.objects.create(sale=sale, medicine=medicine, quantity=quantity, price_at_sale=price)
 
-            # Update medicine stock
             medicine.stock -= quantity
             medicine.save()
 
-        return redirect('invoices-list')  # Or wherever you want to redirect after sale
+        print(f"Total: {total}")
+        sale.total_amount = total
+        sale.save()
+        print(f"Saved total_amount: {sale.total_amount}")
+
+        return redirect('invoices-list')
 
 
 #Medicine Views
