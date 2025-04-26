@@ -1,7 +1,8 @@
 from django.urls import path, include
 from .views import (
     CustomerListView, CustomerCreateView, CustomerUpdateView,
-    CustomerDetailView, CustomerDeleteView, CustomerViewSet, SellMedicineView, MedicineListView, MedicineCreateView, SaleListView
+    CustomerDetailView, CustomerDeleteView, CustomerViewSet, SellMedicineView, MedicineListView, MedicineCreateView,
+    SaleListView, MedicineUpdateView, MedicineDetailView, MedicineDeleteView
 )
 from rest_framework.routers import DefaultRouter
 
@@ -22,9 +23,9 @@ urlpatterns = [
     #Medicine URL Group
     path('medicine/', MedicineListView.as_view(), name='medicine-list'),
     path('medicine/add', MedicineCreateView.as_view(), name='medicine-add'),
-    path('medicine/<int:pk>/edit', SellMedicineView.as_view(), name='medicine-edit'),
-    path('medicine/<int:pk>/', SellMedicineView.as_view(), name='medicine-detail'),
-    path('medicine/<int:pk>/delete', SellMedicineView.as_view(), name='medicine-delete'),
+    path('medicine/<int:pk>/edit', MedicineUpdateView.as_view(), name='medicine-edit'),
+    path('medicine/<int:pk>/', MedicineDetailView.as_view(), name='medicine-detail'),
+    path('medicine/<int:pk>/delete', MedicineDeleteView.as_view(), name='medicine-delete'),
 
 
     #Invoices

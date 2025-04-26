@@ -2,18 +2,106 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Medicine Form</title>
+    <title>{% if object %}Edit{% else %}Add{% endif %} Medicine</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f9f9f9;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 500px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 25px;
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 8px;
+            margin-top: 6px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .error {
+            color: red;
+            font-size: 0.9em;
+            margin-top: 4px;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
 </head>
 <body>
+<div class="container">
+    <h2>{% if object %}Edit{% else %}Add{% endif %} Medicine</h2>
+    <form id="medicineForm" method="post" novalidate>
+        {% csrf_token %}
+        {{ form.as_p }}
 
+        <div class="error" id="formError"></div>
+        <button type="submit">Save</button>
+    </form>
+</div>
 
-<h2>{% if object %}Edit{% else %}Add{% endif %} Medicine</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Save</button>
-</form>
+<script>
+    document.getElementById('medicineForm').addEventListener('submit', function (e) {
+        let isValid = true;
+        const inputs = this.querySelectorAll('input[type="text"], input[type="number"], textarea');
+        const formError = document.getElementById('formError');
+        formError.innerText = "";
 
+        inputs.forEach(input => {
+            const errorElement = document.createElement('div');
+            errorElement.className = 'error';
 
+            if (!input.value.trim()) {
+                errorElement.innerText = `${input.name.replace('_', ' ')} is required`;
+                input.parentNode.appendChild(errorElement);
+                isValid = false;
+            } else {
+                const existingError = input.parentNode.querySelector('.error');
+                if (existingError) {
+                    existingError.remove();
+                }
+            }
+        });
+
+        if (!isValid) {
+            formError.innerText = "Please fix the errors above before submitting.";
+            e.preventDefault();
+        }
+    });
+</script>
 </body>
 </html>

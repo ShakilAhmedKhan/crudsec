@@ -2,9 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Medicine Detail</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .info {
+            font-size: 16px;
+            margin-bottom: 10px;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .info strong {
+            display: inline-block;
+            width: 120px;
+            color: #555;
+        }
+
+        .buttons {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .buttons a {
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .back { background-color: #3498db; }
+        .edit { background-color: #27ae60; }
+        .delete { background-color: #e74c3c; }
+
+        .back:hover { background-color: #2980b9; }
+        .edit:hover { background-color: #219150; }
+        .delete:hover { background-color: #c0392b; }
+    </style>
 </head>
 <body>
+
+<div class="container">
+    <h2>Medicine Details</h2>
+
+    <div class="info"><strong>Name:</strong> {{ medicine.name }}</div>
+    <div class="info"><strong>Price:</strong> ${{ medicine.price }}</div>
+    <div class="info"><strong>Stock:</strong> {{ medicine.stock }}</div>
+    <div class="info"><strong>Shelf:</strong> {{ medicine.shelf }}</div>
+    <div class="info"><strong>Purpose:</strong> {{ medicine.purpose|default:"Not specified" }}</div>
+
+    <div class="buttons">
+        <a href="{% url 'medicine-list' %}" class="back">Back to List</a>
+        <a href="{% url 'medicine-edit' medicine.pk %}" class="edit">Edit</a>
+        <a href="{% url 'medicine-delete' medicine.pk %}" class="delete">Delete</a>
+
+    </div>
+</div>
 
 </body>
 </html>

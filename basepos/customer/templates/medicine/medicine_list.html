@@ -2,23 +2,88 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>MedicineList</title>
+    <title>Medicine List</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 2rem;
+            color: #333;
+        }
+
+        h2 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .add-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin-bottom: 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background-color 0.3s;
+        }
+
+        .add-button:hover {
+            background-color: #2980b9;
+        }
+
+        ul.medicine-list {
+            list-style: none;
+            padding: 0;
+        }
+
+        ul.medicine-list li {
+            background-color: white;
+            padding: 15px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .medicine-actions a {
+            margin-left: 10px;
+            text-decoration: none;
+            color: #3498db;
+        }
+
+        .medicine-actions a:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
 <body>
 
-
-<h2>Medicine List</h2>
-<a href="{% url 'medicine-add' %}">Add Medicine</a>
-<ul>
-    {% for medicine in object_list %}
-    <li>
-        <a href="{% url 'medicine-detail' medicine.pk %}">{{ medicine.name }}</a>
-        | <a href="{% url 'medicine-edit' medicine.pk %}">Edit</a>
-        | <a href="{% url 'medicine-delete' medicine.pk %}">Delete</a>
-    </li>
-    {% endfor %}
-</ul>
-
+<div class="container">
+    <h2>Medicine List</h2>
+    <a href="{% url 'medicine-add' %}" class="add-button">Add Medicine</a>
+    <ul class="medicine-list">
+        {% for medicine in object_list %}
+        <li>
+            <strong>{{ medicine.name }}</strong>
+            <span class="medicine-actions">
+                <a href="{% url 'medicine-detail' medicine.pk %}">View</a> |
+                <a href="{% url 'medicine-edit' medicine.pk %}">Edit</a> |
+                <a href="{% url 'medicine-delete' medicine.pk %}">Delete</a>
+            </span>
+        </li>
+        {% empty %}
+        <li>No medicines available.</li>
+        {% endfor %}
+    </ul>
+</div>
 
 </body>
 </html>
