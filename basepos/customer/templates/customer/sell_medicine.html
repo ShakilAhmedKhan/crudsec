@@ -92,10 +92,12 @@
     <a href="{% url 'medicine-add' %}" class="btn-inline">New Medicine</a>
 
     <h2>Sell Items</h2>
+
     <form method="post" onsubmit="return validateCustomer()">
         {% csrf_token %}
-        {{ sale_form.as_p }}
-        {{ formset.management_form }}
+
+        <!-- ADD the hidden management form manually -->
+        <input type="hidden" name="form-TOTAL_FORMS" value="0">
 
         <!-- Customer Selection -->
         <label for="customer">Select Customer</label>
@@ -106,10 +108,9 @@
             {% endfor %}
         </select>
 
-
         <!-- Medicine Selection -->
         <label for="medicine">Medicine</label>
-        <select name="medicine" id="medicine" required>
+        <select id="medicine" required>
             <option value="">-- Select Medicine--</option>
             {% for med in medicines %}
                 <option value="{{ med.id }}" data-name="{{ med.name }}" data-stock="{{ med.stock }}" data-price="{{ med.price }}">
@@ -132,11 +133,6 @@
                 <th>Unit Price (৳)</th>
                 <th>Subtotal (৳)</th>
                 <th>Remove</th>
-
-                <!-- inside the <td> for Remove column     <td><span class="remove-btn" onclick="removeRow(this, ${subtotal})">X</span></td>     -->
-
-
-
             </tr>
             </thead>
             <tbody id="cart-body"></tbody>
@@ -144,14 +140,58 @@
 
         <div class="total">Total: <span id="total">0.00</span> ৳</div>
 
-        <input type="submit" value="Confirm Sale" style="margin-top: 20px;">
+        <!-- <input type="submit" value="Confirm Sale" style="margin-top: 20px;"> -->
     </form>
 </div>
+
+<button type="button" onclick="confirmSale()">Confirm Sale</button>
+
 
 
 <script>
     let total = 0.0;
     let index = 0;
+
+    // When confirming sale, move cart items to hidden inputs
+    function confirmSale() {
+        const form = document.querySelector("form");
+        const cartBody = document.getElementById("cart-body");
+
+        // Clear existing form fields
+        const medicineFields = document.querySelectorAll('.medicine-field');
+        medicineFields.forEach(field => field.remove());
+
+        // Add dynamic cart items to the form
+        cartBody.querySelectorAll("tr").forEach((row, idx) => {
+            const medicineId = row.querySelector("input[name^='form-'][name$='-medicine']").value;
+            const quantity = row.querySelector("input[name^='form-'][name$='-quantity']").value;
+            const price = row.querySelector("input[name^='form-'][name$='-price_at_sale']").value;
+
+            const medicineField = document.createElement('input');
+            medicineField.type = 'hidden';
+            medicineField.name = `form-${idx}-medicine`;
+            medicineField.value = medicineId;
+            medicineField.classList.add('medicine-field'); // To target with JS if needed later
+            form.appendChild(medicineField);
+
+            const quantityField = document.createElement('input');
+            quantityField.type = 'hidden';
+            quantityField.name = `form-${idx}-quantity`;
+            quantityField.value = quantity;
+            quantityField.classList.add('medicine-field');
+            form.appendChild(quantityField);
+
+            const priceField = document.createElement('input');
+            priceField.type = 'hidden';
+            priceField.name = `form-${idx}-price_at_sale`;
+            priceField.value = price;
+            priceField.classList.add('medicine-field');
+            form.appendChild(priceField);
+        });
+
+        // Submit the form after appending the hidden inputs
+        form.submit();
+    }
 
     function validateCustomer() {
         const customer = document.getElementById('customer').value;
@@ -208,7 +248,7 @@
         cartBody.appendChild(row);
         index++;
 
-        // Update TOTAL FORMS input in management form
+        // Update TOTAL FORMS input
         const totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
         totalFormsInput.value = index;
 
@@ -223,8 +263,14 @@
         total -= parseFloat(amount);
         document.getElementById("total").innerText = total.toFixed(2);
         index--;
-        // update form count
+
+        // Update TOTAL FORMS input
         const totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
         totalFormsInput.value = index;
     }
 </script>
+
+
+
+</body>
+</html>
