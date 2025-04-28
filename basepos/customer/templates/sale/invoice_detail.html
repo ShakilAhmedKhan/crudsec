@@ -1,0 +1,110 @@
+{% load custom_filters %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Invoice Details</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 40px;
+        }
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+        }
+        .info {
+            margin-bottom: 20px;
+        }
+        .info strong {
+            display: inline-block;
+            width: 140px;
+            color: #555;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+        }
+        th {
+            background-color: #3498db;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .back-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Invoice #{{ invoice.id }}</h2>
+
+    <div class="info">
+        <strong>Customer:</strong> {{ invoice.customer.name }}
+    </div>
+    <div class="info">
+        <strong>Total Amount:</strong> ${{ invoice.total_amount }}
+    </div>
+
+    <h3>Sold Items</h3>
+    <table>
+        <thead>
+            <tr>
+                <th>Medicine</th>
+                <th>Quantity</th>
+                <th>Price Per Unit</th>
+                <th>Subtotal</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in invoice.saleitem_set.all %}
+            <tr>
+                <td>{{ item.medicine.name }}</td>
+                <td>{{ item.quantity }}</td>
+                <td>${{ item.price_at_sale }}</td>
+                <td>${{ item.quantity|multiply:item.price_at_sale }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No items found.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'invoices-list' %}" class="back-button">Back to Invoice List</a>
+</div>
+
+</body>
+</html>

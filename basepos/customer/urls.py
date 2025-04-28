@@ -2,7 +2,7 @@ from django.urls import path, include
 from .views import (
     CustomerListView, CustomerCreateView, CustomerUpdateView,
     CustomerDetailView, CustomerDeleteView, CustomerViewSet, SellMedicineView, MedicineListView, MedicineCreateView,
-    SaleListView, MedicineUpdateView, MedicineDetailView, MedicineDeleteView
+    SaleListView, MedicineUpdateView, MedicineDetailView, MedicineDeleteView, SaleDetailView
 )
 from rest_framework.routers import DefaultRouter
 
@@ -30,4 +30,5 @@ urlpatterns = [
 
     #Invoices
     path('invoices/', SaleListView.as_view(), name='invoices-list'),
+    path('invoice/<int:pk>/', SaleDetailView.as_view(), name='invoice-detail'),
 ]

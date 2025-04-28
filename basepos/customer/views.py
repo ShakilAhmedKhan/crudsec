@@ -145,6 +145,14 @@ class SaleListView(ListView):
     ordering = ['-sale_date']
 
 
+class SaleDetailView(DetailView):
+    model = Sale
+    template_name = 'sale/invoice_detail.html'
+    context_object_name = 'invoice'
+
+
+
+
 
 
 # API Views

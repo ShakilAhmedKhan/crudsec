@@ -2,79 +2,85 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Invoices</title>
+    <title>Invoice List</title>
     <style>
         body {
             font-family: 'Segoe UI', sans-serif;
-            background: #f4f6f9;
+            background-color: #eef2f3;
             margin: 0;
-            padding: 30px;
+            padding: 40px;
         }
         .container {
-            max-width: 1000px;
+            max-width: 800px;
             margin: auto;
-            background: white;
+            background: #fff;
             padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
         }
         h2 {
-            margin-top: 0;
-            color: #2c3e50;
+            text-align: center;
+            color: #333;
+            margin-bottom: 20px;
         }
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
         th, td {
-            padding: 12px;
+            padding: 12px 15px;
             text-align: left;
-            border-bottom: 1px solid #ddd;
         }
         th {
-            background: #ecf0f1;
-        }
-        .back-button {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 15px;
-            background: #2c3e50;
+            background-color: #3498db;
             color: white;
-            border-radius: 6px;
-            text-decoration: none;
         }
-        .back-button:hover {
-            background: #34495e;
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        a.button {
+            display: inline-block;
+            padding: 8px 15px;
+            background-color: #27ae60;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        a.button:hover {
+            background-color: #219150;
         }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <a href="{% url 'sell-medicine' %}" class="back-button">← Back to POS</a>
-    <h2>Invoices List</h2>
+    <h2>Invoice List</h2>
+
     <table>
         <thead>
-        <tr>
-            <th>Invoice ID</th>
-            <th>Customer</th>
-            <th>Date</th>
-            <th>Total (৳)</th>
-        </tr>
+            <tr>
+                <th>Invoice ID</th>
+                <th>Customer</th>
+                <th>Total Amount</th>
+                <th>View Details</th>
+            </tr>
         </thead>
         <tbody>
-        {% for invoice in invoices %}
-        <tr>
-            <td>{{ invoice.id }}</td>
-            <td>{{ invoice.customer.name }} ({{ invoice.customer.phone }})</td>
-            <td>{{ invoice.sale_date|date:"Y-m-d H:i" }}</td>
-            <td>{{ invoice.total }}</td>
-        </tr>
-        {% empty %}
-        <tr><td colspan="4" style="text-align:center;">No invoices found.</td></tr>
-        {% endfor %}
+            {% for invoice in invoices %}
+            <tr>
+                <td>{{ invoice.id }}</td>
+                <td>{{ invoice.customer.name }}</td>
+                <td>${{ invoice.total_amount }}</td>
+                <td><a href="{% url 'invoice-detail' invoice.pk %}" class="button">View</a></td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="4" style="text-align: center;">No invoices found.</td>
+            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
+
 </body>
 </html>
