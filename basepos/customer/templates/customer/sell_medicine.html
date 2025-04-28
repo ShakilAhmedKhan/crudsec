@@ -80,6 +80,25 @@
             cursor: pointer;
             font-weight: bold;
         }
+
+        .cart-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        .cart-actions button {
+            font-size: 16px;
+            padding: 12px 20px;
+        }
+        .cart-actions .confirm-btn {
+            background: #27ae60;
+            color: white;
+            font-weight: bold;
+        }
+        .cart-actions .confirm-btn:hover {
+            background: #219150;
+        }
+
     </style>
 </head>
 <body>
@@ -142,9 +161,14 @@
 
         <!-- <input type="submit" value="Confirm Sale" style="margin-top: 20px;"> -->
     </form>
+
+    <div class="class-actions">
+<button type="button" onclick="confirmSale()">Confirm Sale</button>
 </div>
 
-<button type="button" onclick="confirmSale()">Confirm Sale</button>
+</div>
+
+
 
 
 
