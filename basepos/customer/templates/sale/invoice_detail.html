@@ -1,6 +1,5 @@
 {% load custom_filters %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +87,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in invoice.saleitem_set.all %}
+            {% for item in invoice.items.all %}
             <tr>
                 <td>{{ item.medicine.name }}</td>
                 <td>{{ item.quantity }}</td>
