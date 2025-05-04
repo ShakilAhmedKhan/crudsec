@@ -7,6 +7,9 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         #fields = '__all__'
         fields = ['name', 'email', 'phone', 'address','date_of_birth']
+        widgets = {
+            'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 class MedicineForm(forms.ModelForm):
     class Meta:
