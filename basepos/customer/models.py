@@ -42,3 +42,15 @@ class SaleItem(models.Model):
 
 
 
+
+#ML model
+
+class SuggestedMedicine(models.Model):
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    medicine = models.ForeignKey(Medicine, on_delete=models.CASCADE)
+    score = models.FloatField()
+    created_at = models.DateField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('customer', 'medicine', 'created_at')
+        ordering = ['-score']

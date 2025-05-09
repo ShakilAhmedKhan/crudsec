@@ -127,6 +127,13 @@
             {% endfor %}
         </select>
 
+        <!-- Suggestions Section -->
+        <div id="suggestions-box" style="margin-top: 15px; display: none;">
+            <label>Suggested Medicines:</label>
+            <ul id="suggested-list"></ul>
+        </div>
+
+
         <!-- Medicine Selection -->
         <label for="medicine">Medicine</label>
         <select id="medicine" required>
@@ -292,6 +299,32 @@
         const totalFormsInput = document.querySelector('input[name="form-TOTAL_FORMS"]');
         totalFormsInput.value = index;
     }
+
+    const suggestions = {{ suggestions|safe }};
+
+    document.getElementById('customer').addEventListener('change', function () {
+        const selectedId = this.value;
+        const box = document.getElementById('suggestions-box');
+        const list = document.getElementById('suggested-list');
+
+        list.innerHTML = '';
+        if (suggestions[selectedId]) {
+            suggestions[selectedId].forEach(item => {
+                const li = document.createElement('li');
+                li.innerText = item.medicine__name;
+                list.appendChild(li);
+            });
+            box.style.display = 'block';
+        } else {
+            box.style.display = 'none';
+        }
+    });
+
+
+
+
+
+
 </script>
 
 

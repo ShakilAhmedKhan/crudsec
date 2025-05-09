@@ -58,10 +58,12 @@ class CustomerDeleteView(DeleteView):
 
 from django.views import View
 from django.shortcuts import render, redirect
-from .models import Customer, Medicine, Sale, SaleItem
+from .models import Customer, Medicine, Sale, SaleItem, SuggestedMedicine
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
-
+from collections import defaultdict
+from django.db.models import Q, Count
+from . import models
 @method_decorator(csrf_exempt, name='dispatch')
 class SellMedicineView(View):
     template_name = 'customer/sell_medicine.html'
@@ -69,9 +71,23 @@ class SellMedicineView(View):
     def get(self, request, *args, **kwargs):
         customers = Customer.objects.all()
         medicines = Medicine.objects.all()
+
+        # Suggested medicines per customer
+        suggestions = defaultdict(list)
+        for customer in customers:
+            past_items = (
+                SaleItem.objects
+                .filter(sale__customer=customer)
+                .values('medicine__id', 'medicine__name')
+                .annotate(total=Count('medicine'))
+                .order_by('-total')[:3]
+            )
+            suggestions[customer.id] = list(past_items)
+
         return render(request, self.template_name, {
             'customers': customers,
             'medicines': medicines,
+            'suggestions': dict(suggestions),
         })
 
     def post(self, request, *args, **kwargs):
