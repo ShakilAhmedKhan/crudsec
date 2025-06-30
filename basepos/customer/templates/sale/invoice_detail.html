@@ -93,7 +93,7 @@
         <strong>Customer:</strong> {{ invoice.customer.name }}
     </div>
     <div class="info">
-        <strong>Total Amount:</strong> ${{ invoice.total_amount }}
+        <strong>Total Amount:</strong> ৳{{ invoice.total_amount }}
     </div>
 
     <h3>Sold Items</h3>
@@ -111,8 +111,8 @@
             <tr>
                 <td>{{ item.medicine.name }}</td>
                 <td>{{ item.quantity }}</td>
-                <td>${{ item.price_at_sale }}</td>
-                <td>${{ item.quantity|multiply:item.price_at_sale }}</td>
+                <td>৳{{ item.price_at_sale }}</td>
+                <td>৳{{ item.quantity|multiply:item.price_at_sale }}</td>
             </tr>
             {% empty %}
             <tr>

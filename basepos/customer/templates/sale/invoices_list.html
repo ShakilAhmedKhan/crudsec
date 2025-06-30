@@ -89,7 +89,7 @@
             <tr>
                 <td>{{ invoice.id }}</td>
                 <td>{{ invoice.customer.name }}</td>
-                <td>${{ invoice.total_amount }}</td>
+                <td>৳{{ invoice.total_amount }}</td>
                 <td><a href="{% url 'invoice-detail' invoice.pk %}" class="button">View</a></td>
             </tr>
             {% empty %}
