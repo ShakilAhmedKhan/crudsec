@@ -164,7 +164,7 @@
             <div class="info">
                 <strong>{{ customer.name }}</strong>
                 <p>📞 {{ customer.phone }} | 📧 {{ customer.email }}</p>
-                <p>🏠 {{ customer.address }} | 🎂 {{ customer.date_of_birth }}</p>
+                <p>🏠 {{ customer.address }} | 🎂 {{ customer.date_of_birth|date:"d/m/Y" }}</p>
                 <p>⭐ Points: {{ customer.point }}</p>
             </div>
             <div class="actions">
